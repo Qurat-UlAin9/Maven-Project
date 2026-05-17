@@ -1,9 +1,11 @@
 package SeleniumTests;
 
 import java.time.Duration;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.Test;
 
 public class JenkinsTest {
@@ -11,13 +13,21 @@ public class JenkinsTest {
     @Test
     public void testAutomation() {
 
-        System.setProperty("webdriver.chrome.driver",
-                "C:\\Users\\QuratUlAin\\Desktop\\Softwares\\Software Installers\\Editors\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
+        // Auto setup ChromeDriver
+        WebDriverManager.chromedriver().setup();
 
-        WebDriver driver = new ChromeDriver();
+        // Jenkins-safe headless mode
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+
+        WebDriver driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         try {
+
             // Amazon search
             driver.get("https://www.amazon.com");
             driver.findElement(By.id("twotabsearchtextbox")).sendKeys("Nike shoes");
